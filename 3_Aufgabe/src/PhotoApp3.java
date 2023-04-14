@@ -52,14 +52,16 @@ public class PhotoApp3 {
                 int width = sc.nextInt();
                 int height = sc.nextInt();
 
-                var list = raster.asMap().keys();
-                var map = new TreePointColorMap();
-
-                while (list.size() > 0){
-                    var p = list.pollFirst();
-                    map.put(p, raster.getPixelColor(p.getX(), p.getY()));
+                TreePointColorMap tempMap = raster.asMap();
+                PointLinkedList keys = tempMap.keys();
+                SimpleRasterRGB tempRaster = new SimpleRasterRGB(width,height);
+                for (int i = 0; i < keys.size(); i++) {
+                    Point point = keys.get(i);
+                    if (point.getX() < width && point.getY() < height) {
+                        tempRaster.setPixelColor(point.getX(), point.getY(), tempMap.get(point));
+                    }
                 }
-                raster = map.asRasterRGB(width, height);
+                raster = tempRaster;
                 // TODO: fill in missing code.
 
                 cd.close();
