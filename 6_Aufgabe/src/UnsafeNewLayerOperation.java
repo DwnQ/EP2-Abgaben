@@ -13,7 +13,7 @@ public class UnsafeNewLayerOperation implements UnsafeOperation {
     @Override
     public RasterizedRGB execute(RasterizedRGB raster) {
         if(raster instanceof MultiLayerRasterRGBA){
-            return new MultiLayerRasterRGBA((MultiLayerRasterRGBA)raster, new TreeSparseRasterRGBA(raster.getWidth(),raster.getHeight()));
+            return new MultiLayerRasterRGBA(new TreeSparseRasterRGBA(raster.getWidth(),raster.getHeight()),(MultiLayerRasterRGBA)raster);
         }
         return new TreeSparseRasterRGBA(raster.getWidth(),raster.getHeight());
     }

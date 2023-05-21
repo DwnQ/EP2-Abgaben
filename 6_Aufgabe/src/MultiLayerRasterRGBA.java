@@ -9,11 +9,23 @@ public class MultiLayerRasterRGBA implements Layered //TODO: activate clause.
     // TODO: define missing parts of this class.
     private Layered head;
     private SingleLayer foreground;
-
-    public MultiLayerRasterRGBA(Layered layered, TreeSparseRasterRGBA newRaster) {
-
-        head = layered;
-        foreground = newRaster;
+    // Initializes 'this' with top-layer 'foreground' and 'background'.
+    // Performs dynamic type checking of 'background'. If 'background' is an instance of 'Layered'
+    // this constructor initializes 'this' with top-layer 'foreground' and layers of the
+    // 'background'.
+    // If 'background' is not an instance of 'Layered', 'background' is copied to a new object of
+    // 'SingleLayer' which is then used to initialize the background.
+    // Width and height of this raster is determined by width and height of the 'foreground'
+    // raster.
+    // Pixels that are not defined in the 'background' are assumed to have color (0,0,0,0).
+    public MultiLayerRasterRGBA(SingleLayer foreground, RasterizedRGB background) {
+        if(background instanceof Layered){
+            head = (Layered)background;
+        }else{
+            head = new TreeSparseRasterRGBA(background.getWidth(), background.getHeight());
+            background.copyTo(head);
+        }
+        this.foreground = foreground;
     }
 
     @Override
@@ -59,7 +71,7 @@ public class MultiLayerRasterRGBA implements Layered //TODO: activate clause.
 
     @Override
     public Layered newLayer() {
-        return new MultiLayerRasterRGBA(this, new TreeSparseRasterRGBA(getWidth(), getHeight()));
+        return new MultiLayerRasterRGBA( new TreeSparseRasterRGBA(getWidth(), getHeight()),this);
     }
 
     @Override
@@ -71,40 +83,6 @@ public class MultiLayerRasterRGBA implements Layered //TODO: activate clause.
     @Override
     public SingleLayer getForeground() {
         return foreground;
-    }
-
-    // Initializes 'this' with top-layer 'foreground' and 'background'.
-    // Performs dynamic type checking of 'background'. If 'background' is an instance of 'Layered'
-    // this constructor initializes 'this' with top-layer 'foreground' and layers of the
-    // 'background'.
-    // If 'background' is not an instance of 'Layered', 'background' is copied to a new object of
-    // 'SingleLayer' which is then used to initialize the background.
-    // Width and height of this raster is determined by width and height of the 'foreground'
-    // raster.
-    // Pixels that are not defined in the 'background' are assumed to have color (0,0,0,0).
-    public class LayerIterator implements RasterizedRGBIterator {
-        private SingleLayer data;
-        private Layered next;
-        public LayerIterator(Layered layered){
-            this.data = layered.getForeground();
-            this.next = layered.getBackground();
-        }
-
-        @Override
-        public RasterizedRGB next() {
-            if (!hasNext()) return null;
-
-            SingleLayer toReturn = data;
-
-            data = next == null ? null : next.getForeground();
-            next = next instanceof SingleLayer || next == null ? null : next.getBackground();
-
-            return toReturn;
-        }
-        @Override
-        public boolean hasNext() {
-            return this.data != null;
-        }
     }
 }
 

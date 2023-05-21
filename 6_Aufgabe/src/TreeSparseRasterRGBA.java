@@ -131,7 +131,7 @@ public class TreeSparseRasterRGBA implements SingleLayer // TODO: activate claus
     @Override
     public Layered newLayer() {
 
-        return new MultiLayerRasterRGBA(this, new TreeSparseRasterRGBA(width,height));
+        return new MultiLayerRasterRGBA(new TreeSparseRasterRGBA(width,height),this);
     }
 
     @Override
@@ -141,12 +141,12 @@ public class TreeSparseRasterRGBA implements SingleLayer // TODO: activate claus
 
     @Override
     public Layered getBackground() {
-        return this;
+        return null;
     }
 
     @Override
     public RasterizedRGBIterator iterator() {
-        return null;
+        return new LayerIterator(this);
     }
 }
 
