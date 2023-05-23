@@ -20,12 +20,14 @@ public class MultiLayerRasterRGBA implements Layered //TODO: activate clause.
     // Pixels that are not defined in the 'background' are assumed to have color (0,0,0,0).
     public MultiLayerRasterRGBA(SingleLayer foreground, RasterizedRGB background) {
         if(background instanceof Layered){
+            this.foreground = foreground;
             head = (Layered)background;
         }else{
-            head = new TreeSparseRasterRGBA(background.getWidth(), background.getHeight());
-            background.copyTo(head);
+            SingleLayer copy = new TreeSparseRasterRGBA(background.getWidth(), background.getHeight());
+            background.copyTo(copy);
+            System.out.println("a");
+            this.foreground = copy;
         }
-        this.foreground = foreground;
     }
 
     @Override
@@ -50,6 +52,7 @@ public class MultiLayerRasterRGBA implements Layered //TODO: activate clause.
 
     @Override
     public void setPixelColor(int x, int y, Color color) {
+
         foreground.setPixelColor(x,y,color);
     }
 
@@ -60,24 +63,23 @@ public class MultiLayerRasterRGBA implements Layered //TODO: activate clause.
 
     @Override
     public void crop(int width, int height) {
+        head.crop(width,height);
         foreground.crop(width,height);
     }
 
     @Override
     public RasterizedRGBIterator iterator() {
-        var a = new LayerIterator(this);
-        return a;
+        return new LayerIterator(this);
     }
 
     @Override
     public Layered newLayer() {
-        return new MultiLayerRasterRGBA( new TreeSparseRasterRGBA(getWidth(), getHeight()),this);
+        return new MultiLayerRasterRGBA(new TreeSparseRasterRGBA(getWidth(), getHeight()),this);
     }
 
     @Override
     public int numberOfLayers() {
-        if (head != null) return 1 + head.numberOfLayers();
-        return 0;
+        return 1 + head.numberOfLayers();
     }
 
     @Override

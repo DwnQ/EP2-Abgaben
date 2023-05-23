@@ -56,7 +56,6 @@ public class PhotoApp6 {
         commandMap.put("crop", new UnsafeCropFactory());
         commandMap.put("filter", new UnsafeConvolveFactory(filterKernel));
 
-
         // TODO: put key-value associations to 'commandMap': keys are command strings (like "line"
         //  or "fill"), values are corresponding factories.
 
@@ -74,22 +73,26 @@ public class PhotoApp6 {
                 //  The following if-block can be replaced with just this single line:
                 //  commandMap.get(command).create(sc).execute(raster);
 
-                commandMap.get(command).create(sc).execute(raster);
+                raster = (Layered) commandMap.get(command).create(sc).execute(raster);
             }
         }
         cd.close();
-        cd = new CodeDraw(raster.getWidth() * cellSize, raster.getHeight() * cellSize);
-        cd.clear(Color.BLACK);
+        var it = new LayerIterator(raster);
+        while (it.hasNext()){
+            var item = it.next();
+            cd = new CodeDraw(item.getWidth() * cellSize, item.getHeight() * cellSize);
 
-        // draw a square of size 'cellSize' for each pixel
-        for (int j = 0; j < raster.getHeight(); j++) {
-            for (int i = 0; i < raster.getWidth(); i++) {
-                int x = i * cellSize;
-                int y = j * cellSize;
-                cd.setColor(raster.getPixelColor(i, j));
-                cd.fillSquare(x, y, cellSize);
+            cd.clear(Color.BLACK);
+            // draw a square of size 'cellSize' for each pixel
+            for (int j = 0; j < item.getHeight(); j++) {
+                for (int i = 0; i < item.getWidth(); i++) {
+                    int x = i * cellSize;
+                    int y = j * cellSize;
+                    cd.setColor(item.getPixelColor(i, j));
+                    cd.fillSquare(x, y, cellSize);
+                }
             }
+            cd.show();
         }
-        cd.show();
     }
 }

@@ -1,9 +1,12 @@
+import codedraw.CodeDraw;
+
+import java.awt.*;
 import java.util.Scanner;
 
 // This class represents an operation creating a new top-most layer.
 //
 public class UnsafeNewLayerOperation implements UnsafeOperation {
-    Scanner sc;
+    private Scanner sc;
 
     public UnsafeNewLayerOperation(Scanner sc) {
         this.sc = sc;
@@ -12,9 +15,7 @@ public class UnsafeNewLayerOperation implements UnsafeOperation {
     // TODO: specification of the method.
     @Override
     public RasterizedRGB execute(RasterizedRGB raster) {
-        if(raster instanceof MultiLayerRasterRGBA){
-            return new MultiLayerRasterRGBA(new TreeSparseRasterRGBA(raster.getWidth(),raster.getHeight()),(MultiLayerRasterRGBA)raster);
-        }
-        return new TreeSparseRasterRGBA(raster.getWidth(),raster.getHeight());
+        raster = new MultiLayerRasterRGBA(new TreeSparseRasterRGBA(raster.getWidth(),raster.getHeight()), raster);
+        return raster;
     }
 }

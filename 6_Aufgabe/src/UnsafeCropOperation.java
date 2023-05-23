@@ -37,6 +37,7 @@ public class UnsafeCropOperation implements UnsafeOperation {
     // Precondition:
     // this.getWidth() <= raster.getWidth() && this.getHeight() <= raster.getHeight().
     public RasterizedRGB execute(RasterizedRGB raster) {
+
         raster.crop(width,height);
         // TODO: implement method.
         return raster;

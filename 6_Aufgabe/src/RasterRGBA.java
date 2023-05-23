@@ -131,12 +131,18 @@ public class RasterRGBA implements RasterizedRGB{
         }
     }
 
-    // Crops the raster (without changing the underlying data buffer).
+    // Crops the raster.
     // Precondition: 0 < width <= this.getWidth(), 0 < height <= this.getHeight().
     public void crop(int width, int height) {
-
+        RasterRGBA croppedRaster = new RasterRGBA(width, height);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                croppedRaster.setPixelColor(x, y, this.getPixelColor(x, y));
+            }
+        }
         this.width = width;
         this.height = height;
+        this.dataBufferInt = croppedRaster.dataBufferInt;
     }
 
     // Returns the result of the alpha compositing of the 'this' (used as foreground)

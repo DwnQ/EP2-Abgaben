@@ -130,7 +130,6 @@ public class TreeSparseRasterRGBA implements SingleLayer // TODO: activate claus
 
     @Override
     public Layered newLayer() {
-
         return new MultiLayerRasterRGBA(new TreeSparseRasterRGBA(width,height),this);
     }
 

@@ -14,13 +14,12 @@ import java.awt.*;
 public class TreeSetRasterRGBA {
 
     //TODO: declare variables.
-    static final Color MEASUREMENT_COLOR = new Color(0,0,0,0);
-    private RasterRGBA value;
-    private int key;
-    private TreeSetRasterRGBA left, right;
+    private MyTreeSetNode root;
 
     // Initialises 'this' as an empty set.
     public TreeSetRasterRGBA() {
+
+        //TODO: implement constructor.
     }
 
     // Ensures that the specified element is contained in this set. If the element already
@@ -28,31 +27,13 @@ public class TreeSetRasterRGBA {
     // 'true' if the set was changed as a result of the call.
     // Precondition: element != null.
     public boolean add(RasterRGBA element) {
-        if(value == null){
-            key = element.countPixels(MEASUREMENT_COLOR);
-            value = element;
+
+        //TODO: implement method.
+        if (root == null) {
+            root = new MyTreeSetNode(element, null, null);
             return true;
         }
-        if(value.equals(element)){
-            return false;
-        }
-        var k1 = element.countPixels(MEASUREMENT_COLOR);
-
-        if(k1 >= key){
-            if (right == null){
-                right = new TreeSetRasterRGBA();
-            }
-
-            return right.add(element);
-        }
-
-        if(k1 < key){
-            if (left == null){
-                left = new TreeSetRasterRGBA();
-            }
-            return left.add(element);
-        }
-        return false;
+        return root.add(element);
     }
 
     // Returns true if this set contains the specified element, as determined by
@@ -60,20 +41,66 @@ public class TreeSetRasterRGBA {
     // an object 'e' such that element == e.
     // Precondition: element != null.
     public boolean contains(RasterRGBA element) {
-        if(value == null){
+
+        //TODO: implement method.
+        if (root == null) {
             return false;
         }
-        if(element.equals(value)){
-            return true;
-        }
-        if(element.countPixels(MEASUREMENT_COLOR) < value.countPixels(MEASUREMENT_COLOR)){
-            return (left != null) && left.contains(element);
-        }
-        else{
-            return (right != null) && right.contains(element);
-        }
-        //TODO: implement method.
+        return root.contains(element);
     }
 }
 
 // TODO: define further classes, if needed (either here or in a separate file).
+
+class MyTreeSetNode {
+    private MyTreeSetNode left;
+    private MyTreeSetNode right;
+    private RasterRGBA key;
+
+    MyTreeSetNode(RasterRGBA key, MyTreeSetNode left, MyTreeSetNode right) {
+        this.key = key;
+        this.left = left;
+        this.right = right;
+    }
+
+    boolean add(RasterRGBA key) {
+        if (key == this.key) {
+            return false;
+        }
+
+        if (key.countPixels(Color.BLACK) < this.key.countPixels(Color.BLACK)) {
+            if (left == null) {
+                left = new MyTreeSetNode(key, null, null);
+                return true;
+            } else {
+                return left.add(key);
+            }
+        } else {
+            if (right == null) {
+                right = new MyTreeSetNode(key, null, null);
+                return true;
+            } else {
+                return right.add(key);
+            }
+        }
+    }
+
+    boolean contains(RasterRGBA key) {
+        if (key == this.key) {
+            return true;
+        }
+
+        if (key.countPixels(Color.BLACK) < this.key.countPixels(Color.BLACK)) {
+            if (left == null) {
+                return false;
+            }
+            return left.contains(key);
+        } else {
+            if (right == null) {
+                return false;
+            }
+            return right.contains(key);
+        }
+    }
+}
+

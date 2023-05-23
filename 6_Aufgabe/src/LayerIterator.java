@@ -1,26 +1,25 @@
-public class LayerIterator implements RasterizedRGBIterator {
-    private SingleLayer data;
-    private Layered next;
+class LayerIterator implements RasterizedRGBIterator {
+    private SingleLayer nextData;
+    private Layered remainingData;
 
-    public LayerIterator(Layered layered) {
-        this.data = layered.getForeground();
-        this.next = layered.getBackground();
+    public LayerIterator(Layered data) {
+        this.nextData = data.getForeground();
+        this.remainingData = data.getBackground();
     }
 
     @Override
     public RasterizedRGB next() {
         if (!hasNext()) return null;
 
-        SingleLayer toReturn = data;
+        SingleLayer toReturn = nextData;
 
-        data = next == null ? null : next.getForeground();
-        next = next instanceof SingleLayer || next == null ? null : next.getBackground();
-
+        nextData = remainingData == null ? null : remainingData.getForeground();
+        remainingData =  remainingData == null ? null : remainingData.getBackground();
         return toReturn;
     }
 
     @Override
     public boolean hasNext() {
-        return this.data != null;
+        return this.nextData != null;
     }
 }
