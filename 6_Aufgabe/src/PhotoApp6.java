@@ -94,5 +94,18 @@ public class PhotoApp6 {
             }
             cd.show();
         }
+        cd = new CodeDraw(raster.getWidth() * cellSize, raster.getHeight() * cellSize);
+
+        cd.clear(Color.BLACK);
+        // draw a square of size 'cellSize' for each pixel
+        for (int j = 0; j < raster.getHeight(); j++) {
+            for (int i = 0; i < raster.getWidth(); i++) {
+                int x = i * cellSize;
+                int y = j * cellSize;
+                cd.setColor(raster.getPixelColor(i, j));
+                cd.fillSquare(x, y, cellSize);
+            }
+        }
+        cd.show();
     }
 }

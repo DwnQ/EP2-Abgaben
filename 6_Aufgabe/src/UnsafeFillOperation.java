@@ -23,8 +23,15 @@ public class UnsafeFillOperation implements UnsafeOperation {
 
         while (queue.size()>0){
             Point cord = queue.poll();
+            if(cord == null){
+                continue;
+            }
 
             var prevColor = raster.getPixelColor(cord.getX(),cord.getY());
+
+            if(!prevColor.equals(currentColor)){
+                continue;
+            }
             raster.setPixelColor(cord.getX(),cord.getY(),color[0]);
 
             if(prevColor == null || prevColor.equals(currentColor)){
@@ -33,7 +40,9 @@ public class UnsafeFillOperation implements UnsafeOperation {
                 queue.add(new Point(cord.getX()+1,cord.getY()));
                 queue.add(new Point(cord.getX()-1,cord.getY()));
             }
-
+            if(prevColor == null){
+                continue;
+            }
             if(!prevColor.equals(currentColor) && !prevColor.equals(color)){
                 raster.setPixelColor(cord.getX(),cord.getY(),prevColor);
             }

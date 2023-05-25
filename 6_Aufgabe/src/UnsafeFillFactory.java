@@ -8,17 +8,21 @@ import java.util.Scanner;
 public class UnsafeFillFactory implements UnsafeFactory {
 
     // TODO: define missing parts of this class.
-    Color[] color;
+    private Color color[];
+
     // TODO: add constructor specification.
     public UnsafeFillFactory(Color[] c) {
-        this.color = c;
+
         // TODO: implement constructor.
+        this.color = c;
     }
 
     // TODO: add method specification.
+    // Returns a new 'UnsafeCropOperation' object. The 'x' and 'y' parameters of the
+    // returned object are provided by the scanner object 'sc'.
     public UnsafeFillOperation create(Scanner sc) {
-        int x = sc.nextInt();
-        int y = sc.nextInt();
-        return new UnsafeFillOperation(x,y,this.color);
+
+        // TODO: implement method.
+        return new UnsafeFillOperation(sc.nextInt(), sc.nextInt(), color);
     }
 }
