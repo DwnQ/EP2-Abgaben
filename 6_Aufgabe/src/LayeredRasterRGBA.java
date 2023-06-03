@@ -7,7 +7,7 @@ import java.awt.*;
 // has index this.numberOfLayers() - 1.
 // Only one layer is active at a time, on which operations can be performed.
 // All layers have the same size.
-public class LayeredRasterRGBA implements RasterizedRGBIterable{
+public class LayeredRasterRGBA implements RasterizedRGBIterable, Cloneable{
 
     //TODO: declare variables.
     private LinkedListRasterRGBA layers;
@@ -172,18 +172,25 @@ public class LayeredRasterRGBA implements RasterizedRGBIterable{
     @Override
     public RasterizedRGBIterator iterator() {
         return new RasterizedRGBIterator() {
-            LinkedListRasterRGBA linkedListRasterRGBA = layers;
             RasterRGBA node = asRasterRGBA();
+            LinkedListRasterRGBA currentLayers;
+
+            {
+                try {
+                    currentLayers = (LinkedListRasterRGBA)layers.clone();
+                } catch (CloneNotSupportedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
 
             @Override
             public RasterizedRGB next() {
-                node = layers.pollLast();
-                return node;
+                return currentLayers.pollLast();
             }
 
             @Override
             public boolean hasNext() {
-                return node != null && layers.size() != 0;
+                return node != null && currentLayers.size() != 0;
             }
         };
     }

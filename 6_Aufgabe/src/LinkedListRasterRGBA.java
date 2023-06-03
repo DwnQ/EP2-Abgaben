@@ -4,7 +4,7 @@
 // TODO: define further classes and methods for the implementation of the doubly linked list, if
 //  needed.
 //
-public class LinkedListRasterRGBA {
+public class LinkedListRasterRGBA implements Cloneable {
 
     //TODO: declare variables.
     private MyDoubleListNode head;
@@ -14,6 +14,12 @@ public class LinkedListRasterRGBA {
     public LinkedListRasterRGBA() {
 
         //TODO: define constructor.
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+// TODO Auto-generated method stub
+        return super.clone();
     }
 
     // Inserts the specified element 'raster' at the beginning of this list.
