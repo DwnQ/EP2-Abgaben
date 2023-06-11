@@ -1,0 +1,14 @@
+create 30 40
+line 2 3 10 20
+newlayer
+setcolor 255 0 255 255
+line 0 10 17 7
+newlayer
+setcolor 255 0 255 255
+line 0 30 19 0
+create 50 40
+line 2 3 10 20
+newlayer
+line 0 10 17 7
+newlayer
+line 0 29 19 0
