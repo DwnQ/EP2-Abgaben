@@ -61,9 +61,7 @@ public class PhotoApp8 {
                 var b = sc.nextInt();
                 var a = sc.nextInt();
 
-
                 list.add("setcolor" + " " + r +  " " + g + " " + r + " "+ a );
-
                 c[0] = new Color(r, g, b, a);
             } else {
                 // commands with a corresponding factory object creating an operation on a raster.
@@ -74,7 +72,7 @@ public class PhotoApp8 {
                 //
                 var currentCommand = commandMap.get(command).create(sc);
                 list.add(currentCommand.toString());
-                currentCommand.execute(raster);
+                raster = currentCommand.execute(raster);
 
             }
             for (int j = 0; j < raster.getHeight(); j++) {
